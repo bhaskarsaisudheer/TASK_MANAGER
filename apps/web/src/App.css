@@ -1,0 +1,132 @@
+.app {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.brand {
+  font-family: var(--heading);
+  font-weight: 650;
+  color: var(--text-h);
+  text-decoration: none;
+  letter-spacing: -0.2px;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav a {
+  color: var(--text-h);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.nav a:hover {
+  background: var(--social-bg);
+}
+
+.container {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 22px 18px 64px;
+  box-sizing: border-box;
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 86%, var(--code-bg));
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.row > * {
+  flex: 1 1 300px;
+}
+
+.btn {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--text-h);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font: 16px/1 var(--sans);
+}
+
+.btn:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn-ghost {
+  border: 1px solid var(--border);
+  background: transparent;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.field label {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.field input,
+.field textarea,
+.field select {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: 16px/1.3 var(--sans);
+}
+
+.muted {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--social-bg);
+  font-size: 13px;
+}
