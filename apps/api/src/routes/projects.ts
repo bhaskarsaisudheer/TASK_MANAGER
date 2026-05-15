@@ -18,6 +18,7 @@ projectsRouter.get("/", async (req, res) => {
       createdAt: true,
       ownerId: true,
       members: { select: { userId: true, role: true } },
+      tasks: { select: { status: true } }
     },
     orderBy: { createdAt: "desc" },
   });
@@ -95,6 +96,26 @@ projectsRouter.post(
       select: { inviteCode: true },
     });
     return res.json({ inviteCode: final.inviteCode });
+  }
+);
+
+projectsRouter.delete(
+  "/:projectId/members/:memberId",
+  requireProjectRole([ProjectRole.ADMIN]),
+  async (req, res) => {
+    const projectId = req.params.projectId as string;
+    const memberId = req.params.memberId as string;
+    const userId = req.auth!.userId;
+
+    if (memberId === userId) {
+      return res.status(400).json({ error: "Cannot remove yourself from the project via this endpoint" });
+    }
+
+    await prisma.projectMember.delete({
+      where: { projectId_userId: { projectId, userId: memberId } },
+    }).catch(() => null);
+
+    return res.json({ success: true });
   }
 );
 

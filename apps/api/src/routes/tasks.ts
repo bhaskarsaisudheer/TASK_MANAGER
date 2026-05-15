@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../prisma";
-import { ProjectRole, TaskStatus } from "@prisma/client";
+import { ProjectRole, TaskStatus, TaskPriority } from "@prisma/client";
 import { requireProjectRole } from "../middleware/requireProjectRole";
 
 export const tasksRouter = Router({ mergeParams: true });
@@ -19,6 +19,7 @@ tasksRouter.get(
         title: true,
         description: true,
         status: true,
+        priority: true,
         dueDate: true,
         createdAt: true,
         updatedAt: true,
@@ -43,6 +44,7 @@ tasksRouter.post(
       .object({
         title: z.string().min(1),
         description: z.string().optional(),
+        priority: z.nativeEnum(TaskPriority).optional(),
         dueDate: z.string().datetime().optional(),
         assigneeId: z.string().cuid().optional(),
       })
@@ -65,6 +67,7 @@ tasksRouter.post(
         projectId,
         title: body.title,
         description: body.description,
+        priority: body.priority,
         dueDate: body.dueDate ? new Date(body.dueDate) : undefined,
         createdById: userId,
         assigneeId: body.assigneeId,
@@ -74,6 +77,7 @@ tasksRouter.post(
         title: true,
         description: true,
         status: true,
+        priority: true,
         dueDate: true,
         createdAt: true,
         updatedAt: true,
@@ -97,6 +101,7 @@ tasksRouter.patch(
         title: z.string().min(1).optional(),
         description: z.string().nullable().optional(),
         status: z.nativeEnum(TaskStatus).optional(),
+        priority: z.nativeEnum(TaskPriority).optional(),
         dueDate: z.string().datetime().nullable().optional(),
         assigneeId: z.string().cuid().nullable().optional(),
       })
@@ -125,6 +130,7 @@ tasksRouter.patch(
         title: body.title,
         description: body.description === undefined ? undefined : body.description,
         status: body.status,
+        priority: body.priority,
         dueDate:
           body.dueDate === undefined ? undefined : body.dueDate === null ? null : new Date(body.dueDate),
         assigneeId: body.assigneeId === undefined ? undefined : body.assigneeId,
@@ -134,6 +140,7 @@ tasksRouter.patch(
         title: true,
         description: true,
         status: true,
+        priority: true,
         dueDate: true,
         createdAt: true,
         updatedAt: true,
@@ -141,6 +148,28 @@ tasksRouter.patch(
     });
 
     return res.json({ task: updated });
+  }
+);
+
+tasksRouter.delete(
+  "/:taskId",
+  requireProjectRole([ProjectRole.ADMIN, ProjectRole.MEMBER]),
+  async (req, res) => {
+    const projectId = req.params.projectId as string;
+    const taskId = req.params.taskId as string;
+    const role = (req as any).projectRole as ProjectRole;
+    const userId = req.auth!.userId;
+
+    const task = await prisma.task.findFirst({ where: { id: taskId, projectId } });
+    if (!task) return res.status(404).json({ error: "Task not found" });
+
+    // Only ADMIN or the creator can delete the task
+    if (role !== ProjectRole.ADMIN && task.createdById !== userId) {
+      return res.status(403).json({ error: "Only Admin or Task Creator can delete this task" });
+    }
+
+    await prisma.task.delete({ where: { id: taskId } });
+    return res.json({ success: true });
   }
 );
 

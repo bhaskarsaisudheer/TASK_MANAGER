@@ -12,64 +12,79 @@ export function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="row">
-      <div className="card">
-        <h1 style={{ margin: "0 0 8px" }}>Welcome back</h1>
-        <p className="muted" style={{ marginBottom: 18 }}>
-          Login to manage projects and tasks.
-        </p>
-
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setError(null);
-            setLoading(true);
-            try {
-              const data = await apiFetch<{ token: string; user: User }>("/api/auth/login", {
-                method: "POST",
-                body: JSON.stringify({ email, password }),
-              });
-              setToken(data.token);
-              setUser(data.user);
-              nav("/projects");
-            } catch (err: unknown) {
-              setError(err instanceof Error ? err.message : "Login failed");
-            } finally {
-              setLoading(false);
-            }
-          }}
-        >
-          <div className="field">
-            <label>Email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-left bg-blue">
+          <div className="auth-brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color: 'white', marginRight: 8}}>
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Team Task Manager
           </div>
-          <div className="field">
-            <label>Password</label>
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              required
-            />
+          <div className="auth-hero-text">
+            <h2>Welcome Back!</h2>
+            <p>Login to continue managing your tasks and projects.</p>
           </div>
-          {error ? <div className="error" style={{ marginBottom: 10 }}>{error}</div> : null}
-          <button className="btn" type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+          <img src="/assets/login.png" alt="Login Illustration" className="auth-illustration" />
+        </div>
+        <div className="auth-right">
+          <div className="auth-form-container">
+            <h1>Login</h1>
+            <p className="muted" style={{ marginBottom: 32 }}>
+              Enter your credentials to access your account
+            </p>
 
-        <p className="muted" style={{ marginTop: 14 }}>
-          No account? <Link to="/signup">Create one</Link>
-        </p>
-      </div>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setError(null);
+                setLoading(true);
+                try {
+                  const data = await apiFetch<{ token: string; user: User }>("/api/auth/login", {
+                    method: "POST",
+                    body: JSON.stringify({ email, password }),
+                  });
+                  setToken(data.token);
+                  setUser(data.user);
+                  nav("/projects");
+                } catch (err: unknown) {
+                  setError(err instanceof Error ? err.message : "Login failed");
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              <div className="field">
+                <label>Email</label>
+                <input placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+              </div>
+              <div className="field">
+                <label>Password</label>
+                <div className="password-input-wrapper" style={{display: 'flex', flexDirection: 'column'}}>
+                  <input
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    required
+                  />
+                  <div style={{textAlign: 'right', marginTop: '6px'}}>
+                    <Link to="/forgot-password" style={{fontSize: '13px', color: 'var(--primary)', textDecoration: 'none'}}>Forgot password?</Link>
+                  </div>
+                </div>
+              </div>
+              {error ? <div className="error" style={{ marginBottom: 16 }}>{error}</div> : null}
+              <button className="btn btn-primary" type="submit" disabled={loading} style={{ width: "100%", padding: "12px", marginTop: "16px", fontSize: "15px" }}>
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
 
-      <div className="card">
-        <h2 style={{ marginTop: 0 }}>What you can do</h2>
-        <ul style={{ margin: 0, paddingLeft: 18, textAlign: "left" }}>
-          <li>Create or join projects</li>
-          <li>Assign tasks and track status</li>
-          <li>See overdue tasks in your dashboard</li>
-        </ul>
+            <p className="muted" style={{ marginTop: 24, textAlign: "center" }}>
+              Don't have an account? <Link to="/signup" style={{ color: "var(--primary)", fontWeight: 600 }}>Sign up</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
