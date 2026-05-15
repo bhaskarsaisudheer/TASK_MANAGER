@@ -17,6 +17,7 @@ A professional, full-stack team collaboration and task management web applicatio
 - **👥 Role-Based Access Control (RBAC):** `ADMIN` and `MEMBER` roles ensure strict permission control (e.g., only admins can remove members or assign tasks).
 - **✅ Comprehensive Task Tracking:** Create, edit, assign, and track tasks by priority (LOW, MEDIUM, HIGH) and status (TODO, IN PROGRESS, DONE).
 - **📊 Interactive Dashboard:** Visual metrics displaying total tasks, overdue tasks, status breakdowns, and user assignment workloads.
+- **🧭 Comprehensive Navigation:** Dedicated sections for Projects, cross-project Tasks, Calendar views, Team directory, Analytics & Reports, and Account Settings.
 - **🎨 Modern UI/UX:** Responsive, fully custom CSS styling with a beautiful split-pane layout for authentication and a sleek landing page. Light and Dark mode support out-of-the-box.
 
 ---
@@ -124,7 +125,7 @@ npm run dev:web
 - **Projects:** `GET /api/projects`, `POST /api/projects`, `GET /api/projects/:id`
 - **Team:** `POST /api/projects/join`, `DELETE /api/projects/:projectId/members/:memberId`
 - **Tasks:** `GET /api/projects/:projectId/tasks`, `POST /api/projects/:projectId/tasks`, `PATCH /api/projects/:projectId/tasks/:taskId`, `DELETE /api/projects/:projectId/tasks/:taskId`
-- **Dashboard:** `GET /api/dashboard/metrics`
+- **Dashboard:** `GET /api/dashboard`
 
 ---
 
