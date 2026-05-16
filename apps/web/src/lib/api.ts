@@ -1,3 +1,4 @@
+import { API_URL } from "../env";
 import { useAuth } from "../state/auth";
 
 export async function apiFetch<T>(
@@ -8,7 +9,7 @@ export async function apiFetch<T>(
   headers.set("content-type", "application/json");
   if (opts.token) headers.set("authorization", `Bearer ${opts.token}`);
 
-  const res = await fetch(path, { ...opts, headers });
+  const res = await fetch(`${API_URL}${path}`, { ...opts, headers });
   if (!res.ok) {
     let msg = `Request failed (${res.status})`;
     try {

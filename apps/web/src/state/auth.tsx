@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { API_URL } from "../env";
 
 export type User = { id: string; name: string; email: string; createdAt: string };
 
@@ -35,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async function run() {
       if (!token) return;
       try {
-        const res = await fetch("/api/auth/me", { headers: { authorization: `Bearer ${token}` } });
+        const res = await fetch(`${API_URL}/api/auth/me`, { headers: { authorization: `Bearer ${token}` } });
         if (!res.ok) return;
         const data = (await res.json()) as { user: User };
         if (!cancelled) setUser(data.user);
