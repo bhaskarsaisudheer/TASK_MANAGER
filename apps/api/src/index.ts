@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import path from "path";
 import { z } from "zod";
 import { env } from "./env";
 import { authenticate } from "./middleware/authenticate";
@@ -53,20 +52,6 @@ app.use(
 );
 
 app.use("/api/dashboard", authenticate, dashboardRouter);
-
-const webDist = path.resolve(__dirname, "../../web/dist");
-
-app.use(express.static(webDist));
-
-app.get("/*path", (req, res) => {
-  if (req.path.startsWith("/api/")) {
-    return res.status(404).json({
-      error: "Not found",
-    });
-  }
-
-  return res.sendFile(path.join(webDist, "index.html"));
-});
 
 app.use(
   (
