@@ -8,6 +8,9 @@ export default defineConfig({
     allowedHosts: ['web-production-096ce.up.railway.app']
   },
   server: {
+    // In dev mode VITE_API_URL is left unset (empty string) so that
+    // requests fall through to this proxy. In production, set
+    // VITE_API_URL to the API service's public domain instead.
     proxy: {
       '/api': 'http://localhost:3000',
     },
