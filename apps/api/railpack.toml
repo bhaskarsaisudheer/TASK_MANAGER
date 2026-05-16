@@ -1,0 +1,5 @@
+[build]
+cmd = "npm install && npx prisma generate && npm run build"
+
+[deploy]
+cmd = "node dist/index.js"
